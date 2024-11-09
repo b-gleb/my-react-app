@@ -1,38 +1,72 @@
-.App {
+/* App.css */
+
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark {
+  background-color: #1c1c1e;
+  color: #ffffff;
+}
+
+.app {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.top-bar {
+  font-size: 18px;
+  padding: 10px 0;
   text-align: center;
+  font-weight: bold;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.calendar-container, .hours-container {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.day-button, .hour-button, .submit-button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.day-button.today {
+  background-color: #0088cc;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.day-button.disabled {
+  background-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.hour-button {
+  background-color: #e6e6e6;
+}
+
+.hour-button.selected {
+  background-color: #0088cc;
+  color: white;
+}
+
+.submit-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #0088cc;
+  color: white;
+  font-size: 16px;
 }
