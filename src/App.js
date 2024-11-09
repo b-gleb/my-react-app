@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 const currentDate = new Date();
@@ -30,6 +30,18 @@ function getCurrentWeekDates(today = new Date()) {
 
 
 function App() {
+  useEffect(() => {
+    // Check if the script is already added to avoid duplicates
+    if (!document.getElementById('telegram-web-app-script')) {
+        const script = document.createElement('script');
+        script.src = 'https://telegram.org/js/telegram-web-app.js';
+        script.id = 'telegram-web-app-script';
+        script.async = true; // Optional: makes script load asynchronously
+        document.body.appendChild(script);
+    }
+}, []); // Empty dependency array means this effect runs only once
+
+
     const WeekDates = getCurrentWeekDates();
 
     
