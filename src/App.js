@@ -1,31 +1,58 @@
 import React, { useEffect } from 'react';
 import './App.css';
 
-const currentDate = new Date();
+function DayButton({ date }) {
+  const today = new Date();
 
-function DayButton({ date }){
   return (
-    <button className={date > currentDate ? 'day-button' : 'day-button disabled'}>{date.getDate()}</button>
-  )
+    <button
+      className={date > today ? 'day-button' : 'day-button disabled'}
+      onClick={
+        date > today
+        ? () => alert("You selected " + date.toDateString())
+        : null
+      }
+      style={
+        date.getDate() === 1 
+        ? {gridColumnStart: (date.getDay() + 6) % 7 + 1}
+        : {}
+      }
+    >
+      {date.getDate()}
+    </button>
+  );
 }
 
-function getCurrentWeekDates(today = new Date()) {
-  // Create a copy of today's date to avoid modifying the original date
-  const startOfWeek = new Date(today);
-  
-  // Adjust start of week to the most recent Monday
-  const dayOfWeek = today.getDay(); // Sunday - Saturday : 0 - 6
-  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-  startOfWeek.setDate(today.getDate() + diffToMonday);
-  
-  // Generate array of all dates in this week
-  const weekDates = Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + i);
-      return date;
+
+function getCalendarDates() {
+  const today = new Date();
+  const monthNames = [
+        "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ];
+
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - (today.getDay() + 6) % 7);
+
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 27);
+
+  // Create an array of dates between startDate and endDate
+  const dates = Array.from({ length: (endDate - startDate) / (1000 * 60 * 60 * 24) + 1 }, (_, i) => {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    return date;
   });
-  
-  return weekDates;
+
+  // Group the dates by month using reduce
+  const monthDates = dates.reduce((acc, date) => {
+    const monthName = monthNames[date.getMonth()];
+    acc[monthName] = acc[monthName] || [];
+    acc[monthName].push(date);
+    return acc;
+  }, {});
+
+  return monthDates;
 }
 
 
@@ -41,10 +68,7 @@ function App() {
     }
 }, []); // Empty dependency array means this effect runs only once
 
-
-    const WeekDates = getCurrentWeekDates();
-
-    
+    const dates = getCalendarDates();
 
     return (
         <div className="app">
@@ -52,13 +76,19 @@ function App() {
                 {dateSelected ? `Selected Date: ${dateSelected.toDateString()}` : "Select a Date"}
             </header> */}
 
-            <h1>Select date</h1>
+            <h1>График ЛНС</h1>
 
-            <div className='calendar-grid'>
-              {WeekDates.map(date => 
-                <DayButton date={date}/>
-              )}
-            </div>
+            {Object.keys(dates).map(month =>
+              <div key={month}>
+                <p className='month-label'>{month}</p>
+                <div className='calendar-grid'>
+                  {dates[month].map(day =>
+                    <DayButton date={day}/>
+                  )}
+                </div>
+              </div>
+            )}
+
 
           
         </div>
